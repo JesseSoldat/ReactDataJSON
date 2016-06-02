@@ -5,13 +5,15 @@ import Backbone from 'backbone';
 import {Data} from './data';
 
 import {
-	HomeComponent
+	HomeComponent,
+	DetailsComponent
 } from './views';
 
 export default Backbone.Router.extend({
 
 	routes: {
-		'' : 'showHome'
+		'' : 'showHome',
+		'details/:id' : 'showDetails'
 	},
 
 	initialize(appElement) {
@@ -41,11 +43,27 @@ export default Backbone.Router.extend({
 
 		this.render(
 			<HomeComponent 
-			data={this.json}/>
+			data={this.json}
+			details={(id) => this.goto('details/' + id)}/>
 
 			);
-
-
+	},
+	showDetails(id) {
+		// console.log(id);
+		// console.log(this.json);
+		let bio = this.json.filter(function(obj){
+				if(obj.objectId === id) {
+					// console.log(obj.objectId);
+					return obj;
+				}
+		});
+		let userBio = bio[0];
+		// console.log(userBio);
+		
+		this.render(
+			<DetailsComponent
+			detail={userBio}/>
+			);
 	}
 
 });
